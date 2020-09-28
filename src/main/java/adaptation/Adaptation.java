@@ -8,6 +8,9 @@ import transformation.Transformation;
 
 import java.util.Collection;
 
+/**
+ * {@index ulps}
+ */
 public class Adaptation {
     private static Logger log = Logger.getLogger(Adaptation.class.getName());
 

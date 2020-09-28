@@ -2,8 +2,8 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.multiplatform") version "1.4-M2-eap-70"
-    id("org.jetbrains.dokka") version "0.11.0-SNAPSHOT"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.72"
+    id("org.jetbrains.dokka") version "1.4.20-SNAPSHOT"
 }
 group = "org.jetbrains.dokka"
 version = "1.0-SNAPSHOT"
@@ -29,25 +29,24 @@ dependencies {
     testRuntime(
             "org.junit.vintage:junit-vintage-engine:5.4.2"
     )
-    dokkaPlugins("org.jetbrains.dokka:javadoc-plugin:0.11.0-SNAPSHOT")
+//    dokkaJavadocPlugins("org.jetbrains.dokka:javadoc-plugin:1.4.20-SNAPSHOT")
 }
 
 tasks {
-    val dokkaOutputDir = "dokka"
+    val dokkaOutputDir = File("$buildDir/dokka")
+
     val clean = getByName("clean", Delete::class) {
         delete(rootProject.buildDir)
         delete(dokkaOutputDir)
     }
-    val dokka by getting(DokkaTask::class) {
+
+    val dokkaJavadoc by getting(DokkaTask::class) {
         dependsOn(clean)
-        outputDirectory = dokkaOutputDir
-        outputFormat = "javadoc"
+
+        outputDirectory.set(dokkaOutputDir)
         dokkaSourceSets {
             val main by creating {
-                sourceRoot {
-                    path = "${rootProject.rootDir.absolutePath}/src/main/java"
-                    classpath = sourceSets.getByName("main").compileClasspath.map { it.path }
-                }
+                sourceRoot("${rootProject.rootDir.absolutePath}/src/main/java")
             }
         }
     }
